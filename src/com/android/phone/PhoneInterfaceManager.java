@@ -28,7 +28,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.ServiceManager;
-import android.provider.Settings;
 import android.telephony.NeighboringCellInfo;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
@@ -290,8 +289,8 @@ public class PhoneInterfaceManager extends ITelephony.Stub {
         }
         mPhone.setPreferredNetworkType(network,
                 mMainThreadHandler.obtainMessage(CMD_TOGGLE_LTE));
-        Settings.Secure.putInt(mApp.getContentResolver(),
-                Settings.Secure.PREFERRED_NETWORK_MODE, network);
+        android.provider.Settings.Secure.putInt(mApp.getContentResolver(),
+                android.provider.Settings.Secure.PREFERRED_NETWORK_MODE, network);
     }
 
     private boolean showCallScreenInternal(boolean specifyInitialDialpadState,
