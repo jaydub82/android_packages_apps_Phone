@@ -1130,7 +1130,7 @@ public class InCallScreen extends Activity
         }
         String action = intent.getAction();
         if (DBG) log("internalResolveIntent: action=" + action);
-        
+
         // In gingerbread and earlier releases, the InCallScreen used to
         // directly handle certain intent actions that could initiate phone
         // calls, namely ACTION_CALL and ACTION_CALL_EMERGENCY, and also
