@@ -152,6 +152,9 @@ public class CallFeaturesSetting extends PreferenceActivity
     private static final String BUTTON_TTY_KEY    = "button_tty_mode_key";
     private static final String BUTTON_HAC_KEY    = "button_hac_key";
 
+    private static final String BUTTON_STATUSBAR_KEY = "button_statusbar_key";
+    private static final String BUTTON_EXIT_TO_HOMESCREEN_KEY = "button_exit_to_home_screen_key";
+
     private static final String BUTTON_GSM_UMTS_OPTIONS = "button_gsm_more_expand_key";
     private static final String BUTTON_CDMA_OPTIONS = "button_cdma_more_expand_key";
 
@@ -218,6 +221,10 @@ public class CallFeaturesSetting extends PreferenceActivity
 
     private CheckBoxPreference mButtonAutoRetry;
     private CheckBoxPreference mButtonHAC;
+
+    private CheckBoxPreference mButtonStatusbar;
+    private CheckBoxPreference mButtonExitToHomeScreen;
+    
     private ListPreference mButtonDTMF;
     private ListPreference mButtonTTY;
     private ListPreference mButtonSipCallOptions;
@@ -1391,6 +1398,10 @@ public class CallFeaturesSetting extends PreferenceActivity
 
         mButtonDTMF = (ListPreference) findPreference(BUTTON_DTMF_KEY);
         mButtonAutoRetry = (CheckBoxPreference) findPreference(BUTTON_RETRY_KEY);
+        
+        mButtonStatusbar = (CheckBoxPreference) findPreference(BUTTON_STATUSBAR_KEY);
+        mButtonExitToHomeScreen = (CheckBoxPreference) findPreference(BUTTON_EXIT_TO_HOMESCREEN_KEY);
+        
         mButtonHAC = (CheckBoxPreference) findPreference(BUTTON_HAC_KEY);
         mButtonTTY = (ListPreference) findPreference(BUTTON_TTY_KEY);
         mVoicemailProviders = (ListPreference) findPreference(BUTTON_VOICEMAIL_PROVIDER_KEY);

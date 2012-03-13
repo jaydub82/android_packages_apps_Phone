@@ -70,6 +70,9 @@ import com.android.phone.InCallUiState.InCallScreenMode;
 import com.android.phone.OtaUtils.CdmaOtaInCallScreenUiState;
 import com.android.phone.OtaUtils.CdmaOtaScreenState;
 
+import android.preference.PreferenceManager;
+import android.content.SharedPreferences;
+
 import java.util.List;
 
 
@@ -159,11 +162,16 @@ public class InCallScreen extends Activity
     private static final int PHONE_INCOMING_RING = 123;
     private static final int PHONE_NEW_RINGING_CONNECTION = 124;
 
+    private static final String BUTTON_STATUSBAR_KEY = "button_statusbar_key";
+    private static final String BUTTON_EXIT_TO_HOMESCREEN_KEY = "button_exit_to_home_screen_key";
+
     // When InCallScreenMode is UNDEFINED set the default action
     // to ACTION_UNDEFINED so if we are resumed the activity will
     // know its undefined. In particular checkIsOtaCall will return
     // false.
     public static final String ACTION_UNDEFINED = "com.android.phone.InCallScreen.UNDEFINED";
+    
+    public static final String ACTION_END_CALL = "com.android.phone.InCallScreen.END_CALL";
 
     /** Status codes returned from syncWithPhoneState(). */
     private enum SyncWithPhoneStateStatus {
@@ -262,6 +270,15 @@ public class InCallScreen extends Activity
         EARPIECE,   // Handset earpiece (or wired headset, if connected)
     }
 
+    /** 
+     * Extended settings for Landscape, & StatusBar
+     *
+     */
+    //  these are new custom settings - I'm defaulting them to the normal behaviour
+    // but will load them from preferences per user setting.
+    
+    public boolean Enable_StatusBar_In_Call = false;
+    public boolean Exit_To_Home_Screen = false;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -469,6 +486,8 @@ public class InCallScreen extends Activity
             finish();
             return;
         }
+        
+        updateSettings();
 
         mApp = PhoneApp.getInstance();
         mApp.setInCallScreenInstance(this);
@@ -563,6 +582,8 @@ public class InCallScreen extends Activity
     protected void onResume() {
         if (DBG) log("onResume()...");
         super.onResume();
+        
+        updateSettings();
 
         mIsForegroundActivity = true;
         mIsForegroundActivityForProximity = true;
@@ -577,7 +598,12 @@ public class InCallScreen extends Activity
 
         // Disable the status bar "window shade" the entire time we're on
         // the in-call screen.
-        mApp.notificationMgr.statusBarHelper.enableExpandedView(false);
+        if  (Enable_StatusBar_In_Call) {
+        	//StatusBar is enabled
+        	mApp.notificationMgr.statusBarHelper.enableExpandedView(true);
+        }else { // StatusBar is enabled.
+        	mApp.notificationMgr.statusBarHelper.enableExpandedView(false);
+        }
         // ...and update the in-call notification too, since the status bar
         // icon needs to be hidden while we're the foreground activity:
         mApp.notificationMgr.updateInCallNotification();
@@ -1173,7 +1199,11 @@ public class InCallScreen extends Activity
             }
             return;
         }
-
+        // define an intent to allow hangup from notification
+        if (action.equals(ACTION_END_CALL)){
+        	internalHangup();
+        	
+        }
         // Various intent actions that should no longer come here directly:
         if (action.equals(OtaUtils.ACTION_PERFORM_CDMA_PROVISIONING)) {
             // This intent is now handled by the InCallScreenShowActivation
@@ -1230,6 +1260,7 @@ public class InCallScreen extends Activity
 
         // The DTMF Dialpad.
         // TODO: Don't inflate this until the first time it's needed.
+
         ViewStub stub = (ViewStub)findViewById(R.id.dtmf_twelve_key_dialer_stub);
         stub.inflate();
         mDialerView = (DTMFTwelveKeyDialerView) findViewById(R.id.dtmf_twelve_key_dialer_view);
@@ -2506,22 +2537,24 @@ public class InCallScreen extends Activity
                         log("- Show Call Log (or Dialtacts) after disconnect. Current intent: "
                                 + intent);
                     }
-                    try {
-                        startActivity(intent);
-                    } catch (ActivityNotFoundException e) {
+                    if (!Exit_To_Home_Screen)  // If User wants to exit to home screen, skip this part - else go to call log.
+                    	try {
+                    		startActivity(intent);
+                    	} catch (ActivityNotFoundException e) {
                         // Don't crash if there's somehow no "Call log" at
                         // all on this device.
                         // (This should never happen, though, since we already
                         // checked PhoneApp.sVoiceCapable above, and any
                         // voice-capable device surely *should* have a call
                         // log activity....)
-                        Log.w(LOG_TAG, "delayedCleanupAfterDisconnect: "
+                    		Log.w(LOG_TAG, "delayedCleanupAfterDisconnect: "
                               + "transition to call log failed; intent = " + intent);
                         // ...so just return back where we came from....
-                    }
+                    	}
                     // Even if we did go to the call log, note that we still
                     // call endInCallScreenSession (below) to make sure we don't
                     // stay in the activity history.
+                    
                 }
 
                 endInCallScreenSession();
@@ -4492,4 +4525,15 @@ public class InCallScreen extends Activity
     private void log(String msg) {
         Log.d(LOG_TAG, msg);
     }
+    
+  
+    protected void updateSettings() {
+        
+    	SharedPreferences callsettings = PreferenceManager.getDefaultSharedPreferences(this);
+        
+        Enable_StatusBar_In_Call = callsettings.getBoolean(BUTTON_STATUSBAR_KEY,false);
+        
+        Exit_To_Home_Screen = (callsettings.getBoolean(BUTTON_EXIT_TO_HOMESCREEN_KEY,false));
+        
+    }    
 }

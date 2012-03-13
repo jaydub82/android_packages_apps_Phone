@@ -146,4 +146,16 @@
             android:targetClass="com.android.contacts.preference.DialpadPreferenceActivity"/>
     </PreferenceScreen>
 
+    <CheckBoxPreference
+        android:key="button_statusbar_key"
+        android:title="@string/enable_statusbar_title"
+        android:persistent="true"
+        android:summary="@string/enable_statusbar_summary"/>
+
+     <CheckBoxPreference
+        android:key="button_exit_to_home_screen_key"
+        android:title="@string/exit_to_home_screen_title"
+        android:persistent="true"
+        android:summary="@string/exit_to_home_screen_summary"/>
+
 </PreferenceScreen>
