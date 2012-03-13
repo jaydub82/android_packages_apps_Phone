@@ -674,7 +674,7 @@ public class PhoneApp extends Application implements AccelerometerListener.Orien
         intent.putExtra(InCallScreen.SHOW_DIALPAD_EXTRA, showDialpad);
         return intent;
     }
-    
+
     /* package */ static Intent createHangupIntent() {
         Intent intent = new Intent(InCallScreen.ACTION_END_CALL, null);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK

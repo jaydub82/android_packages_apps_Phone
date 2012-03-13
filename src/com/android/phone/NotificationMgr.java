@@ -805,7 +805,7 @@ public class NotificationMgr implements CallerInfoAsyncQuery.OnQueryCompleteList
                 PendingIntent.getActivity(mContext, 0,
                                           PhoneApp.createInCallIntent(), 0);
         notification.contentIntent = inCallPendingIntent;
-        
+
         PendingIntent inCallHangup = PendingIntent.getActivity(mContext, 0,
                 PhoneApp.createHangupIntent(), 0);
 
