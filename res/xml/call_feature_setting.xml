@@ -138,6 +138,15 @@
             android:targetClass="com.android.contacts.preference.DialpadPreferenceActivity"/>
     </PreferenceScreen>
 
+    <PreferenceScreen
+        android:title="@string/speaker_proximity"
+        android:summary="@string/speaker_proximity_summary">
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetPackage="com.android.cna.speakerproximity"
+            android:targetClass="com.android.cna.speakerproximity.SpeakerProximity" />            
+    </PreferenceScreen>
+
     <CheckBoxPreference
         android:key="button_statusbar_key"
         android:title="@string/enable_statusbar_title"
