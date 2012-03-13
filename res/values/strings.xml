@@ -727,6 +727,10 @@
     <string name="tty_mode_option_summary">Set TTY mode</string>
     <string name="auto_retry_mode_title">Auto Retry</string>
     <string name="auto_retry_mode_summary">Enable Auto Retry mode</string>
+    <string name="enable_statusbar_title">Enable status bar</string>
+    <string name="enable_statusbar_summary">Enable use of status bar while in call</string>
+    <string name="exit_to_home_screen_title">Exit to home on end call</string>
+    <string name="exit_to_home_screen_summary">Exit to home screen on end call rather than going to call log</string>
 
     <!-- FDN list screen: menu item label -->
     <string name="menu_add">Add contact</string>
